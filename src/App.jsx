@@ -4,19 +4,21 @@ import Movies from "./components/movies";
 import NotFound from "./components/notFound";
 import Rentals from "./components/Rentals";
 import Customers from "./components/customer";
-// import "./App.css";
-import "./index.css";
 import MovieForm from "./components/movieForm";
-
 import NavBar from "./components/navBar";
+import LoginForm from "./components/loginForm";
+import "./index.css";
 
 class App extends Component {
+
+  
   render() {
     return (
       <React.Fragment>
         <NavBar />
-        <main className="containeer">
+        <main className="container">
           <Switch>
+            <Route path="/login" component={LoginForm} />
             <Route path="/movies/:id" component={MovieForm} />
             <Route path="/movies" component={Movies} />
             <Route path="/customers" component={Customers} />
