@@ -5,14 +5,18 @@ import { paginate } from "../utils/pagainate";
 import ListGroup from "./common/listGroup";
 import { getGenres } from "../services/fakeGenreService";
 import MovieTable from "./movieTable";
+import { Link } from "react-router-dom";
+
 import _ from "lodash";
 
 class Movies extends Component {
   state = {
     movies: [],
-    pageSize: 3,
+    pageSize: 4,
     currentPage: 1,
     genres: [],
+    searchQuery: "",
+    selectedGenre: null,
     sortColumn: { path: "title", order: "asc" }
   };
 
@@ -39,9 +43,13 @@ class Movies extends Component {
   };
 
   handleGenre = genre => {
-    this.setState({ selectedGenre: genre, currentPage: 1 });
+    this.setState({ selectedGenre: genre, searchQuery: "", currentPage: 1 });
   };
+  // when working with controlled components you cant use null or undefined
 
+  handleSearch = query => {
+    this.setState({ searchQuery: query, selectedGenre: null, currentPage: 1 });
+  };
   handleSort = sortColumn => {
     this.setState({ sortColumn });
   };
@@ -83,7 +91,15 @@ class Movies extends Component {
           />
         </div>
         <div className="col">
+          <Link
+            to="/movies/new"
+            className="btn btn-primary"
+            style={{ marginBottom: 20 }}
+          >
+            New Movie
+          </Link>
           <p> There are {totalCount} movies in the datbase</p>
+          <SearchBox value={searchQuery} onChnage={this.handleSearch} />
           <MovieTable
             movies={movies}
             sortColumn={sortColumn}
