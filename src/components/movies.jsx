@@ -6,6 +6,7 @@ import ListGroup from "./common/listGroup";
 import { getGenres } from "../services/fakeGenreService";
 import MovieTable from "./movieTable";
 import { Link } from "react-router-dom";
+import SearchBox from "./common/searchBox";
 
 import _ from "lodash";
 
@@ -59,14 +60,19 @@ class Movies extends Component {
       pageSize,
       currentPage,
       selectedGenre,
+      searchQuery,
       movies: allMovies,
       sortColumn
     } = this.state;
 
-    const filtered =
-      selectedGenre && selectedGenre._id
-        ? allMovies.filter(m => m.genre._id === selectedGenre._id)
-        : allMovies;
+    let filtered = allMovies;
+    if (searchQuery) {
+      filtered = allMovies.filter(m =>
+        m.title.toLowerCase().startsWith(searchQuery.toLowerCase())
+      );
+    } else if (selectedGenre && selectedGenre._id) {
+      filtered = allMovies.filter(m => m.genre._id === selectedGenre._id);
+    }
 
     const sorted = _.orderBy(filtered, [sortColumn.path], [sortColumn.order]);
 
@@ -76,7 +82,7 @@ class Movies extends Component {
   };
   render() {
     const { length: count } = this.state.movies;
-    const { pageSize, currentPage, sortColumn } = this.state;
+    const { pageSize, currentPage, sortColumn, searchQuery } = this.state;
 
     if (count === 0) return <p> There are no movies in the database</p>;
     const { totalCount, data: movies } = this.getPageData();
@@ -99,7 +105,7 @@ class Movies extends Component {
             New Movie
           </Link>
           <p> There are {totalCount} movies in the datbase</p>
-          <SearchBox value={searchQuery} onChnage={this.handleSearch} />
+          <SearchBox value={searchQuery} onChange={this.handleSearch} />
           <MovieTable
             movies={movies}
             sortColumn={sortColumn}
