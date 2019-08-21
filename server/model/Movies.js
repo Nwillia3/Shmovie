@@ -6,7 +6,8 @@ const movieSchema = new mongoose.Schema({
     required: true
   },
   genreId: {
-    type: String
+    type: String,
+    required: true
   },
   dailyRentalRate: {
     type: Number,

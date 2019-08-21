@@ -2,8 +2,12 @@ const mongoose = require("mongoose");
 const express = require("express");
 const bodyParser = require("body-parser");
 const movies = require("./routes/api/movies");
+const connectDB = require("./config/db");
 
 const app = express();
+
+//initializer db
+connectDB();
 
 //body parser middleware
 app.use(bodyParser.urlencoded({ extended: false }));
